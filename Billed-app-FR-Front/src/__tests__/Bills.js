@@ -1,18 +1,20 @@
 /**
  * @jest-environment jsdom
  */
+import { getByTestId } from "@testing-library/dom"
+import userEvent from "@testing-library/user-event"
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH} from "../constants/routes.js"
+import { ROUTES_PATH, ROUTES} from "../constants/routes.js"
 import {localStorageMock} from "../__mocks__/localStorage.js"
-
+import  Bills  from "../containers/Bills.js"
 import router from "../app/Router.js";
+import path from "path"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", async () => {
-
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
@@ -33,6 +35,29 @@ describe("Given I am connected as an employee", () => {
       const antiChrono = (a, b) => ((a < b) ? 1 : -1)
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
+    })
+  })
+  describe('When I click on "icon-eye" ', () => {
+    test('then, I should see the modal', () => {
+      document.body.innerHTML = BillsUI({data: bills})
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({pathname})
+      }
+      const bill = new Bills({
+        document, 
+        onNavigate, 
+        store: null, 
+        localStorage: window.localStorage
+      })
+      const handleClickIconEye = jest.fn(bill.handleClickIconEye)
+      const iconEye = screen.getAllByTestId('icon-eye')
+      iconEye[0].addEventListener('click', function (){
+          handleClickIconEye(iconEye)
+        })
+      userEvent.click(iconEye[0])
+      expect(handleClickIconEye).toHaveBeenCalled()  
+      const modale = document.getElementById('modaleFile')
+      expect(modale).toBeTruthy()
     })
   })
 })

@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { getByTestId } from "@testing-library/dom"
+import { fireEvent, getByTestId } from "@testing-library/dom"
 import userEvent from "@testing-library/user-event"
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
@@ -10,6 +10,7 @@ import { ROUTES_PATH, ROUTES} from "../constants/routes.js"
 import {localStorageMock} from "../__mocks__/localStorage.js"
 import  Bills  from "../containers/Bills.js"
 import router from "../app/Router.js";
+import { mockedBills } from "../__mocks__/store.js"
 import path from "path"
 
 describe("Given I am connected as an employee", () => {
@@ -49,15 +50,37 @@ describe("Given I am connected as an employee", () => {
         store: null, 
         localStorage: window.localStorage
       })
+      $.fn.modal = jest.fn()
+      const iconEye = screen.getAllByTestId('icon-eye')[0]
       const handleClickIconEye = jest.fn(bill.handleClickIconEye)
-      const iconEye = screen.getAllByTestId('icon-eye')
-      iconEye[0].addEventListener('click', function (){
+      iconEye.addEventListener('click', function (){
           handleClickIconEye(iconEye)
-        })
-      userEvent.click(iconEye[0])
+      })
+      userEvent.click(iconEye)
       expect(handleClickIconEye).toHaveBeenCalled()  
       const modale = document.getElementById('modaleFile')
       expect(modale).toBeTruthy()
     })
   })
+  describe('handleClickNewBill Call Test', () => {
+    test('then, should return "NewBill"', () => {
+      document.body.innerHTML = BillsUI({data: bills})
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({pathname})
+      }
+      const bill = new Bills({
+        document, 
+        onNavigate, 
+        store: null, 
+        localStorage: window.localStorage
+      })
+      const btn = screen.getByTestId('btn-new-bill')
+      const handleClickNewBill = jest.fn(bill.handleClickNewBill)
+      handleClickNewBill.onNavigate = jest.fn()
+      btn.addEventListener('click', handleClickNewBill)
+      userEvent.click(btn)
+      expect(handleClickNewBill).toHaveBeenCalled()
+    })
+  })
+  
 })

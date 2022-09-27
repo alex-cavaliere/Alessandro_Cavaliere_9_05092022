@@ -11,7 +11,6 @@ import router from "../app/Router"
 import { ROUTES_PATH} from "../constants/routes.js"
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import userEvent from "@testing-library/user-event"
-import { mockedBills } from "../__mocks__/store.js"
 import Bills from "../containers/Bills.js"
 import Store from "../app/Store.js"
 

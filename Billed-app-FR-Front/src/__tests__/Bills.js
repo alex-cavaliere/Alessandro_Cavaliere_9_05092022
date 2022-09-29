@@ -76,11 +76,9 @@ describe("Given I am connected as an employee", () => {
       })
       const btn = screen.getByTestId('btn-new-bill')
       const handleClickNewBill = jest.fn(bill.handleClickNewBill)
-      handleClickNewBill.onNavigate = jest.fn()
       btn.addEventListener('click', handleClickNewBill)
       userEvent.click(btn)
       expect(handleClickNewBill).toHaveBeenCalled()
-    })
+    }) 
   })
-  
 })

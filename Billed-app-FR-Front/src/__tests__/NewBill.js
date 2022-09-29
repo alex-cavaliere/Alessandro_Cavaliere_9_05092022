@@ -39,14 +39,8 @@ describe("Given I am connected as an employee", () => {
     })
   })
   describe('When I submit the form', () => {
-    test('Then, "handleSUbmit" have to be called', () => {
-        // build user interface
-        //jest.mock('../containers/NewBill')
+    test('Then, "handleSubmit" have to be called', () => {
         // Init newBill
-        const mockStore = {
-          bills: jest.fn(() => newBill.store),
-          create: jest.fn(() => Promise.resolve({}))
-        }
         const newBill = new NewBill({
             document,
             onNavigate,
@@ -60,8 +54,6 @@ describe("Given I am connected as an employee", () => {
         const formNewBill = screen.getByTestId('form-new-bill')
         //const inputFile = screen.getByTestId('file')
         formNewBill.addEventListener('submit', handleSubmit)
-        //inputFile.addEventListener('change', handleSubmit)
-        //userEvent.click(btn)
 
         fireEvent.submit(formNewBill)
         // handleChangeFile function must be called
@@ -71,14 +63,14 @@ describe("Given I am connected as an employee", () => {
   describe('When I choose an image to upload', () => {
     test('then, file image change', () => {
       document.body.innerHTML = NewBillUI()
-      const mockedBills = {
+      const mockStore = {
         bills: jest.fn(() => newBill.store),
         create: jest.fn(() => Promise.resolve({}))
       }
       const newBill = new NewBill({
         document,
         onNavigate,
-        store: mockedBills,
+        store: mockStore,
         localStorage: window.localStorage
       })
 

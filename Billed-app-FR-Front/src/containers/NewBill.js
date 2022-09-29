@@ -19,13 +19,20 @@ export default class NewBill {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
+    const regex = /^(jpg)|(png)|(jpeg)$/
     const fileName = filePath[filePath.length-1]
+    const fileExtension = fileName.split('.')[1]
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
+    const errMessage = this.document.querySelector('.error-message')
 
-    this.store
+    // controle si l'extension est bien une image
+    if(regex.test(fileExtension)){
+      console.log(fileExtension, 'file valido')
+      errMessage.style.display='none'
+      this.store
       .bills()
       .create({
         data: formData,
@@ -39,8 +46,14 @@ export default class NewBill {
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
+    }
+    else {
+      console.log(fileExtension, 'file non valido')
+      errMessage.style.display='block'
+    }
   }
   // da testare
+  // j'impeche la soumission du formulaire dans le cas que un ticket est un format non supporté
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
@@ -58,6 +71,12 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+    /*const fileExtension = bill.fileName.split('.')[1]
+    const regex = /^(jpg)|(png)|(jpeg)$/
+    if(regex.test(fileExtension)){
+      this.updateBill(bill)
+      this.onNavigate(ROUTES_PATH['Bills'])
+    }*/
     this.updateBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }

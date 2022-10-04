@@ -12,6 +12,7 @@ import  Bills  from "../containers/Bills.js"
 import router from "../app/Router.js";
 import { mockedBills } from "../__mocks__/store.js"
 import path from "path"
+import { get } from "jquery"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -39,7 +40,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
   describe('When I click on "icon-eye" ', () => {
-    test('then, I should see the modal', () => {
+    test('then, the modal with bill file is opened ', () => {
       document.body.innerHTML = BillsUI({data: bills})
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({pathname})
@@ -57,13 +58,13 @@ describe("Given I am connected as an employee", () => {
           handleClickIconEye(iconEye)
       })
       userEvent.click(iconEye)
-      expect(handleClickIconEye).toHaveBeenCalled()  
+      expect(handleClickIconEye).toHaveBeenCalled()
       const modale = document.getElementById('modaleFile')
       expect(modale).toBeTruthy()
     })
   })
-  describe('handleClickNewBill Call Test', () => {
-    test('then, should return "NewBill"', () => {
+  describe('When I click on "Nouvelle note des frais"', () => {
+    test('then, I should be render in NewBill page', async () => {
       document.body.innerHTML = BillsUI({data: bills})
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({pathname})
@@ -74,11 +75,14 @@ describe("Given I am connected as an employee", () => {
         store: null, 
         localStorage: window.localStorage
       })
+      await waitFor(() => screen.getByTestId('icon-window'))
+      const iconWindow = screen.getByTestId('icon-window')
       const btn = screen.getByTestId('btn-new-bill')
       const handleClickNewBill = jest.fn(bill.handleClickNewBill)
       btn.addEventListener('click', handleClickNewBill)
       userEvent.click(btn)
       expect(handleClickNewBill).toHaveBeenCalled()
+      expect(iconWindow.classList.contains('active-icon')).toBe(false)
     }) 
   })
 })

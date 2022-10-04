@@ -24,15 +24,15 @@ describe("Given I am connected as an employee", () => {
     window.localStorage.setItem('user', JSON.stringify({
       type: 'Employee'
     }))
-    const root = document.createElement("div")
-    root.setAttribute("id", "root")
-    document.body.append(root)
-    router()
   })
   describe("When I am on NewBill Page", () => {
     test("then, mail icon in vertical layout should be highlighted", async () => {
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
       //to-do write assertion
-      window.onNavigate(ROUTES_PATH.NewBill)
+      window.onNavigate(ROUTES_PATH['NewBill'])
       await waitFor(() => screen.getByTestId('icon-mail'))
       const mailIcon = screen.getByTestId('icon-mail')
       expect(mailIcon.classList.contains('active-icon')).toBe(true)
@@ -59,6 +59,52 @@ describe("Given I am connected as an employee", () => {
         // handleChangeFile function must be called
         expect(handleSubmit).toHaveBeenCalled()
     })
+    test('Then, should add a new bill', async () => {
+      document.body.innerHTML = NewBillUI()
+      // Init newBill
+      const newBill = new NewBill({
+          document,
+          onNavigate,
+          store: null,
+          localStorage: window.localStorage
+      })
+
+      const handleSubmit = jest.fn(() => newBill.handleSubmit)
+      const formNewBill = screen.getByTestId('form-new-bill')
+      //const inputFile = screen.getByTestId('file')
+      formNewBill.addEventListener('submit', handleSubmit)
+      newBill.fileName = 'image.png'
+      window.onNavigate(ROUTES_PATH['Bills'])
+      await waitFor(() => screen.getByTestId('icon-window'))
+      const icon = screen.getByTestId('icon-window')
+      fireEvent.submit(formNewBill)
+      // handleChangeFile function must be called
+      expect(handleSubmit).toHaveBeenCalled()
+      expect(icon).toHaveClass('active-icon')
+    })
+    test('Then, should stay in NewBill page', async () => {
+      document.body.innerHTML = NewBillUI()
+      // Init newBill
+      const newBill = new NewBill({
+          document,
+          onNavigate,
+          store: null,
+          localStorage: window.localStorage
+      })
+
+      const handleSubmit = jest.fn(() => newBill.handleSubmit)
+      const formNewBill = screen.getByTestId('form-new-bill')
+      //const inputFile = screen.getByTestId('file')
+      formNewBill.addEventListener('submit', handleSubmit)
+      newBill.fileName = null
+      window.onNavigate(ROUTES_PATH['NewBill'])
+      await waitFor(() => screen.getByTestId('icon-mail'))
+      const icon = screen.getByTestId('icon-mail')
+      fireEvent.submit(formNewBill)
+      // handleChangeFile function must be called
+      expect(handleSubmit).toHaveBeenCalled()
+      expect(icon).toHaveClass('active-icon')
+    })
   })
   describe('When I choose an image to upload', () => {
     test('then, file image change', () => {
@@ -73,14 +119,13 @@ describe("Given I am connected as an employee", () => {
         store: mockStore,
         localStorage: window.localStorage
       })
-
       const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
       let imageFile = screen.getByTestId('file')
       imageFile.addEventListener('change', handleChangeFile)
       fireEvent.change(imageFile, {
         target: {
           files: [new File(['image.png'], 'image.png', {
-            type: 'png'
+            type: 'image/png'
           })]
         }
       })

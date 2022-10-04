@@ -26,12 +26,12 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-    const errMessage = this.document.querySelector('.error-message')
+    //const errMessage = this.document.querySelector('.error-message')
 
     // controle si l'extension est bien une image
+    // da testare
     if(regex.test(fileExtension)){
       console.log(fileExtension, 'file valido')
-      errMessage.style.display='none'
       this.store
       .bills()
       .create({
@@ -49,7 +49,6 @@ export default class NewBill {
     }
     else {
       console.log(fileExtension, 'file non valido')
-      errMessage.style.display='block'
     }
   }
   // da testare
@@ -57,6 +56,7 @@ export default class NewBill {
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    const errMessage = this.document.querySelector('.error-message')
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -71,14 +71,20 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
-    /*const fileExtension = bill.fileName.split('.')[1]
-    const regex = /^(jpg)|(png)|(jpeg)$/
-    if(regex.test(fileExtension)){
+    // nuova funzionalità da testare
+    if(bill.fileName !== null){
+      const fileExtension = bill.fileName.split('.')[1]
+      const regex = /^(jpg)|(png)|(jpeg)$/
+      if(regex.test(fileExtension)){
+        errMessage.style.display='none'
+        this.updateBill(bill)
+        this.onNavigate(ROUTES_PATH['Bills'])
+      }
       this.updateBill(bill)
-      this.onNavigate(ROUTES_PATH['Bills'])
-    }*/
-    this.updateBill(bill)
-    this.onNavigate(ROUTES_PATH['Bills'])
+      this.onNavigate(ROUTES_PATH['NewBill'])
+    }else{
+      errMessage.style.display= 'block'
+    }
   }
 
   // not need to cover this function by tests

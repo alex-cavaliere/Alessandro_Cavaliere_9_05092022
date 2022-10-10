@@ -76,11 +76,11 @@ describe("Given I am connected as an employee", () => {
       newBill.fileName = 'image.png'
       window.onNavigate(ROUTES_PATH['Bills'])
       await waitFor(() => screen.getByTestId('icon-window'))
-      const icon = screen.getByTestId('icon-window')
+      const iconWindow = screen.getByTestId('icon-window')
       fireEvent.submit(formNewBill)
       // handleChangeFile function must be called
       expect(handleSubmit).toHaveBeenCalled()
-      expect(icon).toHaveClass('active-icon')
+      expect(iconWindow).toHaveClass('active-icon')
     })
     test('Then, should stay in NewBill page', async () => {
       document.body.innerHTML = NewBillUI()
@@ -99,11 +99,11 @@ describe("Given I am connected as an employee", () => {
       newBill.fileName = null
       window.onNavigate(ROUTES_PATH['NewBill'])
       await waitFor(() => screen.getByTestId('icon-mail'))
-      const icon = screen.getByTestId('icon-mail')
+      const iconMail = screen.getByTestId('icon-mail')
       fireEvent.submit(formNewBill)
       // handleChangeFile function must be called
       expect(handleSubmit).toHaveBeenCalled()
-      expect(icon).toHaveClass('active-icon')
+      expect(iconMail).toHaveClass('active-icon')
     })
   })
   describe('When I choose an image to upload', () => {

@@ -30,8 +30,12 @@ export default class NewBill {
 
     // controle si l'extension est bien une image
     // da testare
-    if(regex.test(fileExtension)){
-      console.log(fileExtension, 'file valido')
+    if(!regex.test(fileExtension)){
+      alert("le format n'est pas valide")
+      this.document.querySelector(`input[data-testid="file"]`).value = null
+      return
+    }
+    console.log(fileExtension, 'file valido')
       this.store
       .bills()
       .create({
@@ -46,10 +50,6 @@ export default class NewBill {
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
-    }
-    else {
-      console.log(fileExtension, 'file non valido')
-    }
   }
   // da testare
   // j'impeche la soumission du formulaire dans le cas que un ticket est un format non supporté

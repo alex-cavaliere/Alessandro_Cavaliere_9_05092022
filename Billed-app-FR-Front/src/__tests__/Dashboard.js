@@ -145,7 +145,7 @@ describe('Given I am connected as an Admin', () => {
       const iconEdit = screen.getByTestId('open-bill47qAXb6fIm2zOKkLzMro')
       userEvent.click(iconEdit)
       userEvent.click(iconEdit)
-      const bigBilledIcon = screen.queryByTestId("big-billed-icon")
+      const bigBilledIcon = screen.queryAllByTestId("big-billed-icon")
       expect(bigBilledIcon).toBeTruthy()
     })
   })
@@ -284,7 +284,7 @@ describe("Given I am a user connected as Admin", () => {
         }})
       window.onNavigate(ROUTES_PATH.Dashboard)
       await new Promise(process.nextTick);
-      const message = await screen.getByText(/Erreur 404/)
+      const message = screen.getByText(/Erreur 404/)
       expect(message).toBeTruthy()
     })
 
@@ -303,7 +303,7 @@ describe("Given I am a user connected as Admin", () => {
       expect(message).toBeTruthy()
     })
   })
-
+  
   })
 })
 

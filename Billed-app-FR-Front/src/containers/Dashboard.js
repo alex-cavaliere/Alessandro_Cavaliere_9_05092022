@@ -91,7 +91,7 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
-    if (this.counter === undefined || this.id !== bill.id) this.counter = 0
+    if (this.counter === undefined || this.id === bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
       bills.forEach(b => {
@@ -136,22 +136,17 @@ export default class {
   }
   // aggiustare funzionaltà
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
-    if (this.index === undefined || this.index !== index) this.index = index
-    if (!this.statusList[`listOpen_${index}`]) {
-      //console.log("counter :" + this.counter,"index :" + this.index)
+    this.index = index
+    if (!this.statusList[`listOpen_${this.index}`]) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
-      this.counter ++
-      this.statusList[`listOpen_${index}`] = true
+      this.statusList[`listOpen_${this.index}`] = true
     } else {
-      //console.log(this.counter ,"counter :" + this.counter,"index :" + this.index)
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
-      this.counter ++
-      this.statusList[`listOpen_${index}`] = false
+      this.statusList[`listOpen_${this.index}`] = false
     }
     //console.log(this.status)
     bills.forEach(bill => {

@@ -16,6 +16,11 @@ import { get } from "jquery"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
+    test('Then I should land on a loading page', () => {
+      document.body.innerHTML = BillsUI({ loading: true })
+      const loading = document.getElementById('loading')
+      expect(loading).toBeTruthy()
+    })
     test("Then bill icon in vertical layout should be highlighted", async () => {
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
@@ -85,7 +90,6 @@ describe("Given I am connected as an employee", () => {
       expect(iconWindow.classList.contains('active-icon')).toBe(false)
     }) 
   })
-
   // aggiustare test
 
 
@@ -105,37 +109,42 @@ describe("Given I am connected as an employee", () => {
       expect(iconWindow.classList.contains('active-icon')).toBe(true)
       expect(iconMail.classList.contains('active-icon')).toBe(false)
     })
-  test("When an error occurs on API", async () => {
-    /*beforeEach(() => {
-      jest.spyOn(mockStore, "bills")
-        Object.defineProperty(
-          window,
-          'localStorage',
-          { value: localStorageMock }
-      )
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee',
-        email: "a@a"
-      }))
+    test('Then I should land on a loading page', () => {
+      document.body.innerHTML = BillsUI({ error: true })
+      const erreur = screen.getAllByText('Erreur')
+      expect(erreur).toBeTruthy()
+    })
+    test("When an error occurs on API", async () => {
+      /*beforeEach(() => {
+        jest.spyOn(mockStore, "bills")
+          Object.defineProperty(
+            window,
+            'localStorage',
+            { value: localStorageMock }
+        )
+        window.localStorage.setItem('user', JSON.stringify({
+          type: 'Employee',
+          email: "a@a"
+        }))
+        const root = document.createElement("div")
+        root.setAttribute("id", "root")
+        document.body.appendChild(root)
+        router()
+      })*/
+      Object.defineProperty(window, 'localStorage', {
+        value: localStorageMock
+      });
+      window.localStorage.setItem('user', JSON.stringify({type: 'Employee'}))
       const root = document.createElement("div")
       root.setAttribute("id", "root")
       document.body.appendChild(root)
       router()
-    })*/
-    Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock
-    });
-    window.localStorage.setItem('user', JSON.stringify({type: 'Employee'}))
-    const root = document.createElement("div")
-    root.setAttribute("id", "root")
-    document.body.appendChild(root)
-    router()
-    window.onNavigate(ROUTES_PATH.Bills)
-    const pageData = jest.spyOn(mockStore, "bills")
-    await waitFor(() => mockStore.bills())
-    expect(pageData).toHaveBeenCalled()
-    //aggiustare test
-  })
+      window.onNavigate(ROUTES_PATH.Bills)
+      const pageData = jest.spyOn(mockStore, "bills")
+      await waitFor(() => mockStore.bills())
+      expect(pageData).toHaveBeenCalled()
+      //aggiustare test
+    })
     test("fetches bills from an API and fails with 404 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return {
@@ -163,5 +172,5 @@ describe("Given I am connected as an employee", () => {
       expect(message).toBeTruthy()
     })
   })
-  })
+})
 

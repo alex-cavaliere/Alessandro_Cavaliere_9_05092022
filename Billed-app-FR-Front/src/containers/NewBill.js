@@ -26,12 +26,10 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-    //const errMessage = this.document.querySelector('.error-message')
 
     // controle si l'extension est bien une image
-    // da testare
     if(!regex.test(fileExtension)){
-      alert("le format n'est pas valide")
+      window.alert("le format n'est pas valide")
       this.document.querySelector(`input[data-testid="file"]`).value = null
       return
     }
@@ -51,12 +49,10 @@ export default class NewBill {
         this.fileName = fileName
       }).catch(error => console.error(error))
   }
-  // da testare
   // j'impeche la soumission du formulaire dans le cas que un ticket est un format non supporté
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
-    const errMessage = this.document.querySelector('.error-message')
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -71,19 +67,15 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
-    // nuova funzionalità da testare
     if(bill.fileName !== null){
       const fileExtension = bill.fileName.split('.')[1]
       const regex = /^(jpg)|(png)|(jpeg)$/
       if(regex.test(fileExtension)){
-        errMessage.style.display='none'
         this.updateBill(bill)
         this.onNavigate(ROUTES_PATH['Bills'])
       }
       this.updateBill(bill)
       this.onNavigate(ROUTES_PATH['NewBill'])
-    }else{
-      errMessage.style.display= 'block'
     }
   }
 

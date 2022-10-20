@@ -119,6 +119,7 @@ describe("Given I am connected as an employee", () => {
         store: mockStore,
         localStorage: window.localStorage
       })
+      window.alert = jest.fn()
       const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e))
       let imageFile = screen.getByTestId('file')
       imageFile.addEventListener('change', handleChangeFile)

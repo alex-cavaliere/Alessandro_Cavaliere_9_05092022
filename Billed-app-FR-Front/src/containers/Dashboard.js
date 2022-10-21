@@ -92,11 +92,9 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
-    console.log( "this.id: " + this.id ,"bill.id:" + bill.id)
     if (this.id !== bill.id ) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
-      console.log(this.counter)
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
       })
@@ -137,7 +135,7 @@ export default class {
     this.updateBill(newBill)
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
-  // aggiustare funzionaltà
+  // fix: j'ai crée un boolean pour chaque dropdown qui remplace this.counter
   handleShowTickets(e, bills, index) {
     if (this.index === undefined || this.index !== index) this.index = index
     if (!this.statusList[`listOpen_${this.index}`]) {
@@ -151,7 +149,9 @@ export default class {
         .html("")
         this.statusList[`listOpen_${this.index}`] = false
     }
-    // creare una condizione per controllare handleEditTicket 
+
+    // j'ai crée une condition pour controler handleEditTicket 
+
     bills.forEach(bill => {
       const IDBill = this.document.getElementById('bil' + bill.id)
       if (IDBill !== null){
